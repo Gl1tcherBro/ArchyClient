@@ -67,16 +67,16 @@ public class ConfigCommands {
                 .then(ClientCommandManager.literal("add")
                         .then(ClientCommandManager.argument("target", StringArgumentType.string())
                                 .executes((context) -> {
-                                    List<String> players = ArchyClient.configOptions.getAutoTPAACCEPT();
+                                    List<String> players = ArchyClient.configOptions.getAutoTorture();
                                     String target = StringArgumentType.getString(context, "target");
 
 
-                                    if (players.stream().count() == 3) {
+                                    if (players.size() == 3) {
                                         context.getSource().getPlayer().displayClientMessage(Component.literal("\u00a7cUnable to add another player, you must remove one first!"), false);
                                         return 0;
                                     }
 
-                                    if (players.stream().count() > 3) {
+                                    if (players.size() > 3) {
                                         context.getSource().getPlayer().displayClientMessage(Component.literal("\u00a7cUnable to add another player, you have already exceeded the maximum player count, this may get you kicked for spamming!"), false);
                                         return 0;
                                     }
@@ -95,7 +95,7 @@ public class ConfigCommands {
                 .then(ClientCommandManager.literal("remove")
                         .then(ClientCommandManager.argument("target", StringArgumentType.string())
                                 .executes((context) -> {
-                                    List<String> players = ArchyClient.configOptions.getAutoTPAACCEPT();
+                                    List<String> players = ArchyClient.configOptions.getAutoTorture();
                                     String target = StringArgumentType.getString(context, "target");
 
 

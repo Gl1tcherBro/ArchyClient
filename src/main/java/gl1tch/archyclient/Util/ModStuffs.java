@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import gl1tch.archyclient.Command.*;
 
 public class ModStuffs {
-    public static Integer prevPlayerKills = -1;
+    public static Integer timer = 0;
 
     public static void init() {
         ArchyClient.configOptions = ModConfigHandler.readClientConfig();

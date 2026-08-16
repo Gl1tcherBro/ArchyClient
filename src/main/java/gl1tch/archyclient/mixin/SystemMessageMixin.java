@@ -3,7 +3,6 @@ package gl1tch.archyclient.mixin;
 import gl1tch.archyclient.ArchyClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.chat.*;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
-public class EntityKillMixin {
+public class SystemMessageMixin {
     @Inject(at = @At("TAIL"), method = "handleSystemChat")
     private void kill(ClientboundSystemChatPacket clientboundSystemChatPacket, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
@@ -27,6 +26,10 @@ public class EntityKillMixin {
                     }
                 } else {
                     if (str.contains("insert")) {
+                        if (str.contains(client.player.getName().getString())) {
+                            break;
+                        }
+
                         checkedKilled = true;
                     }
                 }

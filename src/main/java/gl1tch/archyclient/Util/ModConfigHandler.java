@@ -75,7 +75,7 @@ public class ModConfigHandler {
             contents = gson.toJson(ArchyClient.configOptions, ModConfigOptions.class);
 
             try {
-                Files.write(configFilePath, contents.getBytes(), StandardOpenOption.WRITE);
+                Files.write(configFilePath, contents.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
             } catch (Exception e) {
                 ArchyClient.LOGGER.warn("Caught: " + e.toString());
             }

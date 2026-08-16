@@ -2,13 +2,14 @@
   "required": true,
   "package": "gl1tch.archyclient.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "EntityKillMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   },
   "overwrites": {
     "requireAnnotations": true
-	}
+  },
+  "client": [
+    "PlayerTickMixin",
+    "SystemMessageMixin"
+  ]
 }
