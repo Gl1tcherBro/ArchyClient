@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "archyclient",
-	"version": "0.0.2",
+	"version": "${version}",
 	"name": "ArchyClient",
 	"description": "A mod with some utilities for the Adm1nArchy Minecraft server.",
 	"authors": [
