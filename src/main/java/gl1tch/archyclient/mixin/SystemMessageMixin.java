@@ -3,6 +3,7 @@ package gl1tch.archyclient.mixin;
 import gl1tch.archyclient.ArchyClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,6 +32,19 @@ public class SystemMessageMixin {
                         }
 
                         checkedKilled = true;
+                    }
+                }
+            }
+        }
+
+        if (clientboundSystemChatPacket.content().getString().contains("has requested")) {
+//            client.player.displayClientMessage(Component.literal(clientboundSystemChatPacket.content().toString()), false);
+
+            for (String name : ArchyClient.configOptions.getAutoTPAACCEPT()) {
+                if (clientboundSystemChatPacket.content().getString().contains(name + " has requested")) {
+                    if (clientboundSystemChatPacket.content().toString().contains("{" + name + "}")) {
+                        client.player.connection.sendCommand("tpaccept " + name);
+                        break;
                     }
                 }
             }
