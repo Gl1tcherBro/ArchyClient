@@ -4,6 +4,7 @@ import gl1tch.archyclient.Util.ModConfigOptions;
 import gl1tch.archyclient.Util.ModStuffs;
 import net.fabricmc.api.ClientModInitializer;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import org.slf4j.Logger;

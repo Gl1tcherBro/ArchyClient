@@ -4,7 +4,10 @@ import gl1tch.archyclient.ArchyClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetDisplayObjectivePacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
+import net.minecraft.network.protocol.game.ClientboundTabListPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,38 +21,54 @@ public class SystemMessageMixin {
         boolean checkedKilled = false;
 
 
-        if (clientboundSystemChatPacket.content().toString().contains("death.attack")) {
-            for (String str : clientboundSystemChatPacket.content().toString().split(",")) {
-                if (checkedKilled) {
-                    if (str.contains(client.player.getName().getString())) {
-                        client.player.connection.sendChat(ArchyClient.configOptions.getAutoGG());
-                        break;
-                    }
-                } else {
-                    if (str.contains("insert")) {
+        if (ArchyClient.configOptions.getAutoGGActive()) {
+            if (clientboundSystemChatPacket.content().toString().contains("death.attack")) {
+                for (String str : clientboundSystemChatPacket.content().toString().split(",")) {
+                    if (checkedKilled) {
                         if (str.contains(client.player.getName().getString())) {
+                            client.player.connection.sendChat(ArchyClient.configOptions.getAutoGG());
                             break;
                         }
+                    } else {
+                        if (str.contains("insert")) {
+                            if (str.contains(client.player.getName().getString())) {
+                                break;
+                            }
 
-                        checkedKilled = true;
+                            checkedKilled = true;
+                        }
                     }
                 }
             }
         }
 
-        if (clientboundSystemChatPacket.content().getString().contains("has requested")) {
+        if (ArchyClient.configOptions.getAutoTPAACCEPTActive()) {
+            if (clientboundSystemChatPacket.content().getString().contains("has requested")) {
 //            client.player.displayClientMessage(Component.literal(clientboundSystemChatPacket.content().toString()), false);
 
-            for (String name : ArchyClient.configOptions.getAutoTPAACCEPT()) {
-                if (clientboundSystemChatPacket.content().getString().contains(name + " has requested")) {
-                    if (clientboundSystemChatPacket.content().toString().contains("{" + name + "}")) {
-                        client.player.connection.sendCommand("tpaccept " + name);
-                        break;
+                for (String name : ArchyClient.configOptions.getAutoTPAACCEPT()) {
+                    if (clientboundSystemChatPacket.content().getString().contains(name + " has requested")) {
+                        if (clientboundSystemChatPacket.content().toString().contains("{" + name + "}")) {
+                            client.player.connection.sendCommand("tpaccept " + name);
+                            break;
+                        }
                     }
                 }
             }
         }
 
 //        client.player.displayClientMessage(Component.literal(clientboundSystemChatPacket.content().toString()), false);
+    }
+
+    @Inject(at = @At("TAIL"), method = "handleSetDisplayObjective")
+    private void scoreBoard(ClientboundSetDisplayObjectivePacket clientboundSetDisplayObjectivePacket, CallbackInfo ci) {
+        Minecraft client = Minecraft.getInstance();
+
+
+//        if (client.player != null) {
+//            ArchyClient.LOGGER.info(clientboundSetDisplayObjectivePacket.getSlot().toString());
+//
+////            client.player.displayClientMessage(Component.literal(clientboundTabListPacket.toString()), false);
+//        }
     }
 }
