@@ -9,6 +9,7 @@
     "requireAnnotations": true
   },
   "client": [
+    "OptionsScreenMixin",
     "PlayerTickMixin",
     "SystemMessageMixin"
   ]

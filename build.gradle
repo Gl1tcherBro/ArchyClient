@@ -44,6 +44,10 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/archyclient.classtweaker")
+}
+
 jar {
 	def projectName = project.name
 	inputs.property "projectName", projectName

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPacketListener.class)
 public class SystemMessageMixin {
     @Inject(at = @At("TAIL"), method = "handleSystemChat")
-    private void kill(ClientboundSystemChatPacket clientboundSystemChatPacket, CallbackInfo ci) {
+    private void receiveServerMessage(ClientboundSystemChatPacket clientboundSystemChatPacket, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
         boolean checkedKilled = false;
 
