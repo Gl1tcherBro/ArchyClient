@@ -8,7 +8,8 @@
 		"Gl1tcherBro"
 	],
 	"contact": {
-		"sources": "https://github.com/Gl1tcherBro/ArchyClient"
+		"sources": "https://github.com/Gl1tcherBro/ArchyClient",
+		"issues": "https://github.com/Gl1tcherBro/ArchyClient/issues"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/archyclient/icon.png",

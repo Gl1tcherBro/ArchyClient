@@ -83,7 +83,7 @@ public class ConfigCommands {
                                     
                                     players.add(target);
 
-                                    context.getSource().getPlayer().displayClientMessage(Component.literal("Attempted to add '" + target + "' to AutoTPAACCEPT"), false);
+                                    context.getSource().getPlayer().displayClientMessage(Component.literal("Attempted to add '" + target + "' to AutoTorture"), false);
 
                                     ArchyClient.configOptions.setAutoTorture(players);
 
@@ -101,7 +101,7 @@ public class ConfigCommands {
 
                                     players.remove(target);
 
-                                    context.getSource().getPlayer().displayClientMessage(Component.literal("Attempted to remove '" + target + "' from AutoTPAACCEPT"), false);
+                                    context.getSource().getPlayer().displayClientMessage(Component.literal("Attempted to remove '" + target + "' from AutoTorture"), false);
 
                                     ArchyClient.configOptions.setAutoTorture(players);
 
