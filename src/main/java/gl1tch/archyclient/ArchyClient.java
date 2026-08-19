@@ -16,6 +16,9 @@ public class ArchyClient implements ClientModInitializer {
 
 	public static ModConfigOptions configOptions;
 
+	public static boolean hasRunCommand;
+	public static int checkScoreboardTimer;
+
 	@Override
 	public void onInitializeClient() {
 		ModStuffs.init();

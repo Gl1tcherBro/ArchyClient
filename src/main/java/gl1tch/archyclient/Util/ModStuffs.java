@@ -41,6 +41,7 @@ public class ModStuffs {
     }
 
     public static void setAutoTPAACCEPTString(String val) {
+        if (!val.isEmpty()) {
         List<String> list = new ArrayList<>();
 
 
@@ -49,16 +50,23 @@ public class ModStuffs {
         }
 
         ArchyClient.configOptions.setAutoTPAACCEPT(list);
+        } else {
+            ArchyClient.configOptions.setAutoTorture(new ArrayList<>());
+        }
     }
 
     public static void setAutoTortureString(String val) {
-        List<String> list = new ArrayList<>();
+        if (!val.isEmpty()) {
+            List<String> list = new ArrayList<>();
 
 
-        for (String str : val.split(",")) {
-            list.add(str);
+            for (String str : val.split(",")) {
+                list.add(str);
+            }
+
+            ArchyClient.configOptions.setAutoTorture(list);
+        } else {
+            ArchyClient.configOptions.setAutoTorture(new ArrayList<>());
         }
-
-        ArchyClient.configOptions.setAutoTorture(list);
     }
 }

@@ -13,17 +13,21 @@ public class ModConfigOptions {
     private boolean autoTortureActive;
     private String autoSkipAdmin;
     private boolean autoSkipAdminActive;
+    private String autoCommand;
+    private boolean autoCommandActive;
 
     public ModConfigOptions() {
         this.autoGG = "GG";
         this.autoTPAACCEPT = new ArrayList<>();
         this.autoTorture = new ArrayList<>();
         this.autoSkipAdmin = "5";
+        this.autoCommand = "/kill @r";
 
         this.autoGGActive = true;
         this.autoTPAACCEPTActive = true;
         this.autoTortureActive = true;
         this.autoSkipAdminActive = false;
+        this.autoCommandActive = false;
     }
 
     public String getAutoGG() {
@@ -88,5 +92,21 @@ public class ModConfigOptions {
 
     public void setAutoSkipAdminActive(boolean val) {
         this.autoSkipAdminActive = val;
+    }
+
+    public String getAutoCommand() {
+        return this.autoCommand;
+    }
+
+    public void setAutoCommand(String val) {
+        this.autoCommand = val;
+    }
+
+    public boolean getAutoCommandActive() {
+        return this.autoCommandActive;
+    }
+
+    public void setAutoCommandActive(boolean val) {
+        this.autoCommandActive = val;
     }
 }

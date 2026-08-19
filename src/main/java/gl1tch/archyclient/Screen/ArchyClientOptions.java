@@ -17,6 +17,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ArchyClientOptions extends Screen {
@@ -29,11 +30,14 @@ public class ArchyClientOptions extends Screen {
     private static final Component AUTOTORTURE = Component.literal("AutoTorture players (CSV style)");
     private static final Component TOGGLEAUTOSKIPADMIN = Component.literal("Toggle AutoSkipAdmin");
     private static final Component AUTOSKIPADMIN = Component.literal("AutoSkipAdmin minutes");
+    private static final Component TOGGLEAUTOCOMMAND = Component.literal("Toggle AutoCommand");
+    private static final Component AUTOCOMMAND = Component.literal("AutoCommand command");
 
     private EditBox autoGGBox;
     private EditBox autoTpaAcceptBox;
     private EditBox autoTortureBox;
     private EditBox autoSkipAdminBox;
+    private EditBox autoCommandBox;
     private final HeaderAndFooterLayout layout = new HeaderAndFooterLayout(this, 61, 33);
 
     public ArchyClientOptions(Component title) {
@@ -55,6 +59,8 @@ public class ArchyClientOptions extends Screen {
         rowHelper.addChild(this.autoTortureBox = this.editBox(AUTOTORTURE, ModStuffs.getListAsString(ArchyClient.configOptions.getAutoTorture()), ModStuffs::setAutoTortureString));
         rowHelper.addChild(this.actionButton(TOGGLEAUTOSKIPADMIN, ArchyClientOptions::toggleAutoSkipAdmin));
         rowHelper.addChild(this.autoSkipAdminBox = this.editBox(AUTOSKIPADMIN, ArchyClient.configOptions.getAutoSkipAdmin(), ArchyClient.configOptions::setAutoSkipAdmin));
+        rowHelper.addChild(this.actionButton(TOGGLEAUTOCOMMAND, ArchyClientOptions::toggleAutoCommand));
+        rowHelper.addChild(this.autoCommandBox = this.editBox(AUTOCOMMAND, ArchyClient.configOptions.getAutoCommand(), ArchyClient.configOptions::setAutoCommand));
         this.layout.addToContents(gridLayout);
         this.layout.addToFooter(Button.builder(CommonComponents.GUI_DONE, (buttonx) -> this.onClose()).width(200).build());
         this.layout.visitWidgets((guiEventListener) -> {
@@ -73,7 +79,7 @@ public class ArchyClientOptions extends Screen {
         boolean shouldSave = false;
 
 
-        if (ArchyClient.configOptions.getAutoGG() == this.autoGGBox.getValue())
+        if (Objects.equals(ArchyClient.configOptions.getAutoGG(), this.autoGGBox.getValue()))
             shouldSave = true;
 
         for (String str : this.autoTpaAcceptBox.getValue().split(",")) {
@@ -86,7 +92,10 @@ public class ArchyClientOptions extends Screen {
                 shouldSave = true;
         }
 
-        if (ArchyClient.configOptions.getAutoSkipAdmin() == this.autoSkipAdminBox.getValue())
+        if (Objects.equals(ArchyClient.configOptions.getAutoSkipAdmin(), this.autoSkipAdminBox.getValue()))
+            shouldSave = true;
+
+        if (Objects.equals(ArchyClient.configOptions.getAutoCommand(), this.autoCommandBox.getValue()))
             shouldSave = true;
 
         if (shouldSave) {
@@ -94,6 +103,7 @@ public class ArchyClientOptions extends Screen {
             ModStuffs.setAutoTPAACCEPTString(this.autoTpaAcceptBox.getValue());
             ModStuffs.setAutoTortureString(this.autoTortureBox.getValue());
             ArchyClient.configOptions.setAutoSkipAdmin(this.autoSkipAdminBox.getValue());
+            ArchyClient.configOptions.setAutoCommand(this.autoCommandBox.getValue());
 
             ModConfigHandler.writeClientConfig();
 
@@ -167,6 +177,25 @@ public class ArchyClientOptions extends Screen {
 
         ArchyClient.configOptions.setAutoSkipAdminActive(!ArchyClient.configOptions.getAutoSkipAdminActive());
         if (ArchyClient.configOptions.getAutoSkipAdminActive()) {
+            msg += "Enabled";
+        } else {
+            msg += "Disabled";
+        }
+
+        minecraft.getToastManager().addToast(
+                SystemToast.multiline(minecraft, SystemToast.SystemToastId.NARRATOR_TOGGLE, Component.literal("ArchyClient"), Component.literal(msg))
+        );
+
+        ModConfigHandler.writeClientConfig();
+    }
+
+    public static void toggleAutoCommand() {
+        Minecraft minecraft = Minecraft.getInstance();
+        String msg = "AutoCommand ";
+
+
+        ArchyClient.configOptions.setAutoCommandActive(!ArchyClient.configOptions.getAutoCommandActive());
+        if (ArchyClient.configOptions.getAutoCommandActive()) {
             msg += "Enabled";
         } else {
             msg += "Disabled";

@@ -11,6 +11,6 @@
   "client": [
     "OptionsScreenMixin",
     "PlayerTickMixin",
-    "SystemMessageMixin"
+    "PacketListenerMixin"
   ]
 }

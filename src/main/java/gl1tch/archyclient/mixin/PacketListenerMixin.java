@@ -4,17 +4,14 @@ import gl1tch.archyclient.ArchyClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetDisplayObjectivePacket;
-import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
-import net.minecraft.network.protocol.game.ClientboundTabListPacket;
+import net.minecraft.network.protocol.game.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
-public class SystemMessageMixin {
+public class PacketListenerMixin {
     @Inject(at = @At("TAIL"), method = "handleSystemChat")
     private void receiveServerMessage(ClientboundSystemChatPacket clientboundSystemChatPacket, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
@@ -60,15 +57,31 @@ public class SystemMessageMixin {
 //        client.player.displayClientMessage(Component.literal(clientboundSystemChatPacket.content().toString()), false);
     }
 
-    @Inject(at = @At("TAIL"), method = "handleSetDisplayObjective")
-    private void scoreBoard(ClientboundSetDisplayObjectivePacket clientboundSetDisplayObjectivePacket, CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "handleSetScore")
+    private void scoreBoard(ClientboundSetScorePacket clientboundSetScorePacket, CallbackInfo ci) {
         Minecraft client = Minecraft.getInstance();
 
 
-//        if (client.player != null) {
-//            ArchyClient.LOGGER.info(clientboundSetDisplayObjectivePacket.getSlot().toString());
-//
-////            client.player.displayClientMessage(Component.literal(clientboundTabListPacket.toString()), false);
-//        }
+        if (client.player != null) {
+            if (ArchyClient.configOptions.getAutoSkipAdminActive() && client.player.getDisplayName().toString().contains("literal{§4[§lADMIN§4] §f}")) {
+                try {
+                    String str = String.valueOf(Integer.parseInt(ArchyClient.configOptions.getAutoSkipAdmin()) - 1);
+
+                    if (ArchyClient.configOptions.getAutoSkipAdmin().contains("10")) {
+                        client.player.connection.sendCommand("skipadmin");
+                    } else if (clientboundSetScorePacket.owner().contains("§a⌚ §7Next admin: §f" + str)) {
+                        client.player.connection.sendCommand("skipadmin");
+                    }
+                } catch (Exception e) {
+                    client.player.displayClientMessage(Component.literal("\u00a7cAutoSkipAdmin has an invalid value, or something else broke, first make sure AutoSkipAdmin is set to a whole number, if this message still appears please report this bug."), false);
+                    client.player.displayClientMessage(Component.literal("Disabled AutoSkipAdmin to prevent error message spamming."), false);
+                    ArchyClient.configOptions.setAutoSkipAdminActive(false);
+                }
+            }
+
+            ArchyClient.checkScoreboardTimer = 0;
+
+//            client.player.displayClientMessage(Component.literal(clientboundSetScorePacket.owner()), false);
+        }
     }
 }

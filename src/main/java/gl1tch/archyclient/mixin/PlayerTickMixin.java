@@ -45,7 +45,25 @@ public class PlayerTickMixin {
                         }
                     }
                 }
+
+                if (ArchyClient.configOptions.getAutoCommandActive() && ArchyClient.hasRunCommand) {
+                    if (ArchyClient.configOptions.getAutoCommand().startsWith("/")) {
+                        client.player.connection.sendCommand(ArchyClient.configOptions.getAutoCommand().substring(1));
+
+                        ArchyClient.hasRunCommand = true;
+                    }
+                }
+            } else {
+                ArchyClient.hasRunCommand = false;
             }
+
+            if (ArchyClient.checkScoreboardTimer >= 100) {
+                ArchyClient.checkScoreboardTimer = 0;
+
+                client.player.connection.sendCommand("scoreboard");
+            }
+
+            ArchyClient.checkScoreboardTimer++;
         }
     }
 }
